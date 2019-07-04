@@ -4,6 +4,7 @@ import (
 	"strings"
 	"regexp"
 	"net/http"
+	"log"
 )
 
 //最大匹配深度，默认10
@@ -55,6 +56,8 @@ func UrlMatch(w http.ResponseWriter, r *http.Request) {
 		if matchpattern(k, url) {
 			params := GetUrlParamsByPattern(k, url)
 			v(params,w,r)
+			return
 		}
 	}
+	log.Println("Pattern not found")
 }
