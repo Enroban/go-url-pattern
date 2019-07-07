@@ -52,6 +52,7 @@ func matchpattern(pattern string, uri string) bool {
 //url匹配处理返回url匹配以后模板代表的参数，还有函数用以后期处理
 func UrlMatch(w http.ResponseWriter, r *http.Request) {
 	url := r.URL.Path
+	url=strings.ToLower(url)
 	for k, v := range PatternsFunctionContainer {
 		if matchpattern(k, url) {
 			params := GetUrlParamsByPattern(k, url)
