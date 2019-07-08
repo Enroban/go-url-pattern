@@ -18,7 +18,7 @@ func GetUrlParamsByPattern(pattern string, uri string) (map[string]string) {
 	params := make(map[string]string)
 	uriSplited := strings.Split(uri, "/")
 	patternSplited := strings.Split(pattern, "/")
-	r, _ := regexp.Compile("^\\{[0-9a-zA-Z]+\\}$")
+	r, _ := regexp.Compile("^\\{[0-9a-zA-Z_-]+\\}$")
 	r2, _ := regexp.Compile("\\{|\\}")
 	for k, v := range patternSplited {
 		if r.MatchString(v) {
@@ -31,7 +31,7 @@ func GetUrlParamsByPattern(pattern string, uri string) (map[string]string) {
 
 //判断模板与路径是否匹配
 func matchpattern(pattern string, uri string) bool {
-	r, _ := regexp.Compile("\\{[0-9a-zA-Z]+\\}")
+	r, _ := regexp.Compile("\\{[0-9a-zA-Z_-]+\\}")
 	patternsplited := r.Split(pattern, MaxPatternLength)
 	patternsplitedsize := len(patternsplited)
 	reg := ""
@@ -41,7 +41,7 @@ func matchpattern(pattern string, uri string) bool {
 		if x+1 != patternsplitedsize {
 			//默认不支持中文模板参数，若要允许则使用这个
 			//reg += "[0-9a-zA-Z-_\u4e00-\u9fa5]+"
-			reg += "[0-9a-zA-Z-_]+"
+			reg += "[0-9a-zA-Z_-]+"
 		}
 	}
 	reg += "$"
