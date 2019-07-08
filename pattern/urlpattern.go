@@ -30,22 +30,18 @@ func GetUrlParamsByPattern(pattern string, uri string) (map[string]string) {
 }
 
 //判断模板与路径是否匹配
-func matchpattern(pattern string, uri string) bool {
+func Matchpattern(pattern string, uri string) bool {
 	r, _ := regexp.Compile("\\{[0-9a-zA-Z_-]+\\}")
-	patternsplited := r.Split(pattern, MaxPatternLength)
-	patternsplitedsize := len(patternsplited)
-	reg := ""
-	reg += "^"
-	for x, v := range patternsplited {
-		reg += v
-		if x+1 != patternsplitedsize {
-			//默认不支持中文模板参数，若要允许则使用这个
-			//reg += "[0-9a-zA-Z-_\u4e00-\u9fa5]+"
-			reg += "[0-9a-zA-Z_-]+"
-		}
-	}
-	reg += "$"
-	r2, _ := regexp.Compile(reg)
+
+	// 默认不支持中文模板参数，若要允许则使用这个
+	//reg := "[0-9a-zA-Z-_\u4e00-\u9fa5]+"
+	regTmp := "[0-9a-zA-Z_-]+"
+
+	regPattern := "^"
+	regPattern += r.ReplaceAllString(pattern, regTmp)
+	regPattern += "$"
+	r2, _ := regexp.Compile(regPattern)
+
 	return r2.MatchString(uri)
 }
 
@@ -53,9 +49,9 @@ func matchpattern(pattern string, uri string) bool {
 func UrlMatch(w http.ResponseWriter, r *http.Request) {
 	url := r.URL.Path
 	for k, v := range PatternsFunctionContainer {
-		if matchpattern(k, url) {
+		if Matchpattern(k, url) {
 			params := GetUrlParamsByPattern(k, url)
-			v(params,w,r)
+			v(params, w, r)
 			return
 		}
 	}

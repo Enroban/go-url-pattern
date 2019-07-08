@@ -23,3 +23,7 @@ func PatternTest1()  {
 
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
+
+func PatternTest2()  {
+	fmt.Println(pattern.Matchpattern("/abcd/{id1}/abc/{id2}","/abcd/ad1/abc/ad23sd"))
+}
